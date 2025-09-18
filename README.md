@@ -4,6 +4,8 @@ Sometimes you find yourself staring at a bunch of networks that look like that c
 
 `littlefluffyclouds` is that smoosher.
 
+![AI generated picture of purple and red and yellow clouds with birds flying past them. Yes, AI generated. I suck at art and have zero budget to commission artwork for this fun little project. The project itself is 100% handwritten, except for the autocomplete parts that my non-AI IDE helped me with, which is OK because we only dislike machine-generated code if it's called AI and it's otherwise "just the way things are done".](lfc.jpg)
+
 For example, this AS has a huge number of small networks. In many cases, two /24 networks are adjacent and could be combined into a single /23. There's also a big /14 network with 252 smaller networks inside it. If you use that raw output in a command or a firewall rule, etc., then you'd have to add _7,945_ networks. Wow! That's too many.
 
 ```shell
@@ -53,6 +55,7 @@ The end result is 16 networks. _Sixteen._ That's just about 1/500th the original
 
 ```python
 from ipaddress import IPv4Network as I
+from littlefluffyclouds import gather
 print(gather([I('10.0.8.0/24'), I('10.0.9.0/24'), I('10.0.10.0/24'), I('10.0.11.0/24')]))
 ```
 

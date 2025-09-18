@@ -65,7 +65,7 @@ Some differences with other packages which do the same thing:
 - It's often way faster. Like ridiculously faster. Think milliseconds versus minutes faster.
 - It's written with modern Python with typing and all that.
 - Its command line is _optional_. All the work is done in a handy API that you can call from your own project.
-- It gives correct results, even in pathological cases where little networks are intermingled with bigger ones. That case causes several other packages to only merge the big networks or the little ones, even when you could a bunch of little ones with one big one.
+- It gives correct results, even in pathological cases where little networks are intermingled with bigger ones. That case causes several other packages to only merge the big networks or the little ones, even when you could combine a bunch of little ones with one big one.
 
 ## Version history
 

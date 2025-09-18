@@ -1,0 +1,21 @@
+[project]
+name = "littlefluffyclouds"
+version = "0.1.0"
+description = "Gather a bunch of small adjacent networks into larger ones."
+readme = "README.md"
+authors = [
+    { name = "Kirk Strauser", email = "kirk@strauser.com" }
+]
+requires-python = ">=3.13"
+
+[project.scripts]
+littlefluffyclouds = "littlefluffyclouds:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]

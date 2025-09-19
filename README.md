@@ -1,10 +1,10 @@
 # Little Fluffy Clouds: Gather a bunch of small adjacent networks into larger ones.
 
-Sometimes you find yourself staring at a bunch of networks that look like that could be compressed if you could just kind of smoosh them together enough.
+Sometimes you find yourself staring at a bunch of networks that look like they could be combined if you could just kind of smoosh them together enough.
 
 `littlefluffyclouds` is that smoosher.
 
-![AI generated picture of purple and red and yellow clouds with birds flying past them. Yes, AI generated. I suck at art and have zero budget to commission artwork for this fun little project. The project itself is 100% handwritten, except for the autocomplete parts that my non-AI IDE helped me with, which is OK because we only dislike machine-generated code if it's called AI and it's otherwise "just the way things are done".](lfc.jpg)
+![AI generated picture of purple and red and yellow clouds with birds flying past them. Yes, AI generated. I suck at art and have zero budget to commission artwork for this fun little project. The project itself is 100% handwritten, except for the autocomplete parts that my non-AI IDE helped me with, which is OK because we only dislike machine-generated code if it's called AI and it's otherwise "just the way things are done".](https://github.com/kstrauser/littlefluffyclouds/blob/main/lfc.jpg?raw=true)
 
 For example, this AS has a huge number of small networks. In many cases, two /24 networks are adjacent and could be combined into a single /23. There's also a big /14 network with 252 smaller networks inside it. If you use that raw output in a command or a firewall rule, etc., then you'd have to add _7,945_ networks. Wow! That's too many.
 
@@ -28,7 +28,9 @@ $ curl -s https://ip.guide/AS9121 | jq -r .routes.v4[]
 Instead, let's let `littlefluffyclouds` mash all those little clouds into a smaller number of big ones that cover the exact same collection of addresses:
 
 ```shell
-$ uv run littlefluffyclouds $(curl -s https://ip.guide/AS9121 | jq -r .routes.v4[])
+$ curl -s https://ip.guide/AS9121 |
+  jq -r .routes.v4[] |
+  uv run littlefluffyclouds --stdin
 2.17.224.0/20
 2.20.24.0/22
 23.55.52.0/22
@@ -56,7 +58,12 @@ The end result is 16 networks. _Sixteen._ That's just about 1/500th the original
 ```python
 from ipaddress import IPv4Network as I
 from littlefluffyclouds import gather
-print(gather([I('10.0.8.0/24'), I('10.0.9.0/24'), I('10.0.10.0/24'), I('10.0.11.0/24')]))
+print(gather([
+    I('10.0.8.0/24'),
+    I('10.0.9.0/24'),
+    I('10.0.10.0/24'),
+    I('10.0.11.0/24')
+]))
 ```
 
 That prints `[IPv4Network('10.0.8.0/22')]`. Whoa! I know, right?
@@ -66,10 +73,19 @@ That prints `[IPv4Network('10.0.8.0/22')]`. Whoa! I know, right?
 Some differences with other packages which do the same thing:
 
 - It's often way faster. Like ridiculously faster. Think milliseconds versus minutes faster.
-- It's written with modern Python with typing and all that.
+- It's written with modern Python with typing and ruff and formatting and all that.
 - Its command line is _optional_. All the work is done in a handy API that you can call from your own project.
 - It gives correct results, even in pathological cases where little networks are intermingled with bigger ones. That case causes several other packages to only merge the big networks or the little ones, even when you could combine a bunch of little ones with one big one.
 
+## Authors
+
+Little Fluffy Clouds is copyright 2025 by Kirk Strauser <kirk@strauser.com>.
+
+## License
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
 ## Version history
 
+**v0.2.0, 2025-09-19:** Add `--stdin` flag. License fix.\
 **v0.1.0, 2025-09-17:** Initial release.

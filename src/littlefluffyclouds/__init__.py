@@ -12,7 +12,8 @@ from argparse import ArgumentParser
 from collections import defaultdict
 from ipaddress import IPv4Network, IPv6Network, ip_network
 from itertools import pairwise
-from typing import overload
+from sys import stdin
+from typing import TextIO, overload
 
 
 @overload
@@ -89,15 +90,31 @@ def is_superset(big: list[IPv4Network], little: list[IPv4Network]) -> bool:
     return True
 
 
+def read_networks(infile: TextIO) -> list[str]:
+    """Return a list the whitespace-separated items in the input file."""
+    out = []
+    for line in infile:
+        for item in line.split():
+            out.append(item.strip())
+    return out
+
+
 def main():
     """Combine a list of IPv4 and/or IPv6 networks into a smaller collection."""
     parser = ArgumentParser(__name__, description=main.__doc__)
-    parser.add_argument("network", help="An IPv4 or IPv6 network.", nargs="+")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("-s", "--stdin", help="Read networks from stdin", action="store_true")
+    group.add_argument("network", help="An IPv4 or IPv6 network.", nargs="*")
     args = parser.parse_args()
+
+    if args.stdin:
+        networks = read_networks(stdin)
+    else:
+        networks = args.network
 
     ipv4 = []
     ipv6 = []
-    for raw in args.network:
+    for raw in networks:
         net = ip_network(raw)
         if isinstance(net, IPv4Network):
             ipv4.append(net)

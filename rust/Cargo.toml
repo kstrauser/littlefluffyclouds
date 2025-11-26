@@ -1,0 +1,7 @@
+[package]
+name = "littlefluffyclouds"
+version = "0.2.0"
+edition = "2024"
+
+[dependencies]
+ipnet = "2.11.0"

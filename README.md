@@ -51,7 +51,17 @@ $ curl -s https://ip.guide/AS9121 |
 
 The end result is 16 networks. _Sixteen._ That's just about 1/500th the original size _with identical address space coverage._ Yay, big clouds!
 
-## API
+## Implementations
+
+This repository contains two implementations:
+* **Python** (`python/`): Full-featured library with API and CLI
+* **Rust** (`rust/`): Fast command-line tool for network aggregation
+
+Both implementations provide the same core functionality: aggregating IP networks into their minimal representation.
+
+### Python Usage
+
+#### Python API
 
 "But I don't _want_ to use a command line," you might say. Neither did I! `littlefluffyclouds` makes that easy peasy lemon squeezy!
 
@@ -67,6 +77,23 @@ print(gather([
 ```
 
 That prints `[IPv4Network('10.0.8.0/22')]`. Whoa! I know, right?
+
+### Rust Usage
+
+The Rust implementation (`rust/`) is a fast command-line tool:
+
+```shell
+$ cat networks.txt | cargo run
+# Or build and install:
+$ cd rust && cargo install --path .
+$ echo -e '192.168.0.0/24\n192.168.1.0/24' | littlefluffyclouds
+192.168.0.0/23
+```
+
+For help:
+```shell
+$ littlefluffyclouds --help
+```
 
 ## But... why?
 
